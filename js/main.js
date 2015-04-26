@@ -90,11 +90,11 @@ $(function() {
     var missed;
 
     for (var i = 0; i < first; i++) {
-      thisPass.first.push(Math.floor((Math.random() * max) + 1));
+      thisPass.first.push(getRandomInt(1, max))
     }
 
     for (var i = 0; i < second; i++) {
-      thisPass.second.push(Math.floor((Math.random() * max) + 1));
+      thisPass.second.push(getRandomInt(1, max))
     }
 
     if (orderMatters) {
@@ -129,5 +129,9 @@ $(function() {
 
     return iteration;
   }
+
+  function getRandomInt (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 });
