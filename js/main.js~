@@ -33,7 +33,7 @@ $(function() {
   function interval(dieType, rollFirst, rollSecond) {
     roll(dieType, rollFirst, rollSecond);
     if (!isStopped) {
-      setTimeout(function() {interval(dieType, rollFirst, rollSecond);}, 5);
+      setTimeout(function() {interval(dieType, rollFirst, rollSecond);}, 3);
     }
   }
 

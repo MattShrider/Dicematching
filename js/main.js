@@ -18,6 +18,9 @@ $(function() {
 
 
   function startSim() {
+    if (!isStopped) {
+      return;
+    }
     var rollFirst = $first.val();
     var rollSecond = $second.val();
     orderMatters = $order.is(':checked');
