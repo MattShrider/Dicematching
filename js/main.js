@@ -8,12 +8,14 @@ $(function() {
   var $rolls = $('#rolls');
   var $first = $('#first-amount');
   var $second = $('#second-amount');
+  var $bulk = $('#bulk-amount');
 
   var orderMatters;
   var dieType;
   var isStopped = true;
   $('#start').on('click', startSim);
   $('#stop').on('click', stopSim);
+  $('#bulk').on('click', bulkRoll);
 
 
 
@@ -31,6 +33,20 @@ $(function() {
     createDom(rollFirst, rollSecond);
 
     interval(dieType, rollFirst, rollSecond);
+  }
+
+  function bulkRoll() {
+    var rollFirst = $first.val();
+    var rollSecond = $second.val();
+    orderMatters = $order.is(':checked');
+    dieType = $type.val();
+    rollMatches = {};
+
+    createDom(rollFirst, rollSecond);
+
+    for (var i = 0; i < $bulk.val(); i++) {
+      roll(dieType, rollFirst, rollSecond);
+    }
   }
 
   function interval(dieType, rollFirst, rollSecond) {
