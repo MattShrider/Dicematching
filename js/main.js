@@ -45,7 +45,7 @@ $(function() {
     createDom(rollFirst, rollSecond);
 
     for (var i = 0; i < $bulk.val(); i++) {
-      roll(dieType, rollFirst, rollSecond);
+      roll(dieType, rollFirst, rollSecond, (i < $bulk.val() - 1));
     }
   }
 
@@ -80,7 +80,8 @@ $(function() {
     }
   }
 
-  function roll(max, first, second) {
+  function roll(max, first, second, skipDomUpdate) {
+    skipDomUpdate = skipDomUpdate === undefined ? false : skipDomUpdate;
     var thisPass = {
       first: [],
       second: []
@@ -100,14 +101,23 @@ $(function() {
     if (orderMatters) {
       matched = getMatchesWithOrder(thisPass.first, thisPass.second);
     } else {
-      matched = 0;
+      matched = getMatches(thisPass.first, thisPass.second);
     }
 
     rollMatches.total++;
     rollMatches[matched].amount++;
+    if (!skipDomUpdate) {
+      updateDom(first);
+    }
+  }
+
+  function updateDom(amount) {
     $amount.text(rollMatches.total);
-    rollMatches[matched].$amount.text(rollMatches[matched].amount);
-    rollMatches[matched].$percent.text((rollMatches[matched].amount / rollMatches.total * 100).toFixed(2));
+
+    for (var i=0; i <= amount; i++) {
+      rollMatches[i].$amount.text(rollMatches[i].amount);
+      rollMatches[i].$percent.text((rollMatches[i].amount / rollMatches.total * 100).toFixed(2));
+    }
   }
 
   function getMatchesWithOrder(first, second) {
@@ -130,8 +140,35 @@ $(function() {
     return iteration;
   }
 
+  function getMatches(first, second) {
+    var matched = false;
+    var amount = 0;
+    do {
+      matched = false;
+      for (var i = 0; i < first.length; i++) {
+        for (var j = 0; j < second.length; j++) {
+          if (first[i] === second[j]) {
+            matched = true;
+            amount++;
+            second.splice(j, 1);
+            first.splice(i, 1);
+            break;
+          } else {
+            matched = false;
+          }
+        }
+        if (matched) {
+          break;
+        }
+      }
+    } while(matched);
+
+    return amount;
+  }
+
   function getRandomInt (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  }
 
 });
+
